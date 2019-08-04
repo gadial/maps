@@ -7,6 +7,7 @@ $specific_elements = {
     'filters' => "/svg/defs/g[@id='filters']",
     'rivers' => "/svg/g[@id='viewbox']/g[@id='rivers']",
     'routes' => "/svg/g[@id='viewbox']/g[@id='routes']",
+    'regions' => "/svg/g[@id='viewbox']/g[@id='regions']",
     'states_body' => "/svg/g[@id='viewbox']/g[@id='regions']/g[@id='statesBody']",
     'definitions' => "/svg/defs"
 }
@@ -31,8 +32,15 @@ def write_html(xmldoc)
     File.open("map.html", "w") {|f| f.write(html)}
 end
 
-filter_out(xmldoc, $elements_to_filter)
-xmldoc.elements[$specific_elements['states_body']].delete_attribute('style')
+def change_style(element)
+    new_style = yield(element['style'])
+    element.add_attribute('style', new_style)
+end
+
+#filter_out(xmldoc, $elements_to_filter)
+for element in ['states_body', 'regions'] do
+    change_style(xmldoc.elements[$specific_elements[element]]) {|style| style.gsub('pointer-events:none;','')}
+end
 
 for state in xmldoc.elements[$specific_elements['states_body']] do
     if state['id'] =~ /state\d+/
