@@ -32,8 +32,12 @@ def write_html(xmldoc)
 end
 
 filter_out(xmldoc, $elements_to_filter)
+xmldoc.elements[$specific_elements['states_body']].delete_attribute('style')
+
 for state in xmldoc.elements[$specific_elements['states_body']] do
-    state.add_attribute('class', 'state') if state['id'] =~ /state\d+/
+    if state['id'] =~ /state\d+/
+        state.add_attribute('class', 'state') 
+    end
 end
 
 show_structure(xmldoc)

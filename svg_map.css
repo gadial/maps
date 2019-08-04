@@ -1,6 +1,7 @@
 #map{
 	background-size: cover;
 }
+
 .state:hover {
 	stroke: #002868 !important;
 	stroke-width:2px;
