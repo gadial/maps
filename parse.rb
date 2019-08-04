@@ -5,10 +5,13 @@ xmldoc = Document.new(xmlfile)
 
 $specific_elements = {
     'filters' => "/svg/defs/g[@id='filters']",
-    'rivers' => "/svg/g[@id='viewbox']/g[@id='rivers']"
+    'rivers' => "/svg/g[@id='viewbox']/g[@id='rivers']",
+    'routes' => "/svg/g[@id='viewbox']/g[@id='routes']",
+    'states_body' => "/svg/g[@id='viewbox']/g[@id='regions']/g[@id='statesBody']",
+    'definitions' => "/svg/defs"
 }
 
-$elements_to_filter = ['filters', 'rivers']
+$elements_to_filter = ['filters', 'rivers', 'routes', 'definitions']
 
 def show_structure(xmldoc)
     xmldoc.elements.each("//*") do |element|
@@ -29,5 +32,9 @@ def write_html(xmldoc)
 end
 
 filter_out(xmldoc, $elements_to_filter)
+for state in xmldoc.elements[$specific_elements['states_body']] do
+    state.add_attribute('class', 'state') if state['id'] =~ /state\d+/
+end
+
 show_structure(xmldoc)
 write_html(xmldoc)
