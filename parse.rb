@@ -27,7 +27,7 @@ def filter_out(xmldoc, elements_to_filter)
 end
 
 def write_html(xmldoc)
-    html = '<!DOCTYPE html><html><head><title>Blog Map</title><link rel="stylesheet" type="text/css" href="svg_map.css"></link></head><body>{{ svg }}</body></html>'
+    html = '<!DOCTYPE html><html><head><title>Blog Map</title><link rel="stylesheet" type="text/css" href="svg_map.css"></link><script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script><script src="svg-pan-zoom.min.js"></script><script src="map.js"></script></head><body>{{ svg }}</body></html>'
     html.gsub!("{{ svg }}", xmldoc.to_s)
     File.open("map.html", "w") {|f| f.write(html)}
 end
